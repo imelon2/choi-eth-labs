@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Terminal } from "lucide-react"
+import { Terminal, HexagonIcon } from "lucide-react"
 
 export function Sidebar() {
   const pathname = usePathname()
@@ -82,6 +82,20 @@ export function Sidebar() {
                 >
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
                   <span>Transaction Data</span>
+                </li>
+                <li
+                  className={`flex items-center gap-3 rounded-md px-3 py-2 transition-colors hover:bg-muted cursor-pointer ${
+                    pathname === "/calldata" || pathname?.startsWith("/calldata/")
+                      ? "bg-muted text-primary" 
+                      : "text-foreground"
+                  }`}
+                  onClick={() => {
+                    router.push("/calldata")
+                    closeSidebar()
+                  }}
+                >
+                  <HexagonIcon width="24" height="24" />
+                  <span>Calldata Decoder</span>
                 </li>
               </ul>
             </div>

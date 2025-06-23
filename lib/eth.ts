@@ -3,7 +3,9 @@ import {
   decodeFunctionData,
   formatEther,
   formatUnits,
+  getAbiItem,
   Log,
+  toFunctionSignature,
 } from "viem";
 import { getChainClientFromChainId, MultiPublicClient } from "./client";
 import { requestAbi } from "./http";
@@ -41,6 +43,7 @@ export interface DecodedCallData {
   params?: Record<string, any>;
   raw: string;
   url?: string;
+  funcSignature?: string;
 }
 
 export interface DecodedEvent {
@@ -135,12 +138,14 @@ export async function decodeCallData(data: string): Promise<DecodedCallData> {
   });
 
   const params = processObject(selectedAbi[0]!.inputs, decodedInput.args);
-
+  const funcSignature = toFunctionSignature(selectedAbi[0]!)
+  
   return {
     method: decodedInput.functionName,
     params,
     raw: data,
     url,
+    funcSignature,
   };
 }
 
@@ -220,5 +225,39 @@ export async function fetchBatchData(
       rollupData: batchData.data,
       daCert: null,
     };
+  }
+}
+
+/**
+ * Decodes Ethereum calldata
+ * @param calldata - The hex string to decode (starting with 0x)
+ * @returns Decoded calldata information
+ */
+export async function decodeCalldata(calldata: string): Promise<any> {
+  // Validate input
+  if (!calldata || !calldata.startsWith('0x')) {
+    throw new Error('Invalid calldata format. Must start with 0x.')
+  }
+  
+  const result = await decodeCallData(calldata)
+  console.log("decodeCalldata result:", result) // URL 정보 확인
+  
+  if(!result.params) {
+    return null
+  }
+  
+  // Extract function selector (first 4 bytes / 10 characters including 0x)
+  const selector = calldata.slice(0, 10)
+  
+  // Default dummy data
+  return {
+    selector,
+    method: {
+      name: result.method, 
+      signature: result.funcSignature
+    },
+    params: result.params,
+    raw: calldata,
+    url: result.url
   }
 }

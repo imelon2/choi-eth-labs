@@ -296,16 +296,19 @@ export default function TransactionPage({ params }: { params: Promise<{ hash: st
               <CardContent>
                 {decodedCallData ? (
                   <div className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="flex flex-col">
-                        <span className="text-sm text-muted-foreground mb-1">Method</span>
-                        <div className="flex items-center gap-2 break-all">
-                          <span className="text-sm font-medium">{decodedCallData.method || ''}</span>
+                    <div className="pb-4">
+                      <h3 className="text-sm font-medium mb-2">Method Information</h3>
+                      <div className="p-3">
+                        <div className="mb-1">
+                          <span className="text-sm text-muted-foreground mr-2">Name:</span>
+                          <span className="font-medium">
+                            {decodedCallData.method || ''}
+                          </span>
                           {decodedCallData.method && abiUrl && (
                             <Button
                               variant="ghost"
                               size="sm"
-                              className="h-6 px-2 py-0 text-xs font-medium text-primary hover:bg-primary/10 hover:text-primary-foreground transition-colors"
+                              className="h-6 px-2 py-0 ml-2 text-xs font-medium text-primary hover:bg-primary/10 hover:text-primary-foreground transition-colors"
                               onClick={() => window.open(abiUrl, '_blank')}
                             >
                               <ExternalLink className="h-3 w-3 mr-1" />
@@ -313,6 +316,12 @@ export default function TransactionPage({ params }: { params: Promise<{ hash: st
                             </Button>
                           )}
                         </div>
+                        {decodedCallData.funcSignature && (
+                          <div>
+                            <span className="text-sm text-muted-foreground mr-2">Signature:</span>
+                            <code className="text-xs font-mono">{decodedCallData.funcSignature}</code>
+                          </div>
+                        )}
                       </div>
                     </div>
                     
