@@ -6,6 +6,7 @@ import {
   getAbiItem,
   Log,
   toFunctionSignature,
+  decodeErrorResult
 } from "viem";
 import { getChainClientFromChainId, MultiPublicClient } from "./client";
 import { requestAbi } from "./http";
@@ -152,7 +153,7 @@ export async function decodeCallData(data: string): Promise<DecodedCallData> {
 export async function decodeEvents(
   logs: Log<bigint, number, false>[]
 ): Promise<DecodedEvent[] | null> {
-  // 로그가 없는 경우 null 반환
+  // Return null if no logs are provided
   if (!logs || logs.length === 0) {
     return null;
   }
@@ -240,7 +241,6 @@ export async function decodeCalldata(calldata: string): Promise<any> {
   }
   
   const result = await decodeCallData(calldata)
-  console.log("decodeCalldata result:", result) // URL 정보 확인
   
   if(!result.params) {
     return null
@@ -259,5 +259,43 @@ export async function decodeCalldata(calldata: string): Promise<any> {
     params: result.params,
     raw: calldata,
     url: result.url
+  }
+}
+
+/**
+ * Decodes Ethereum error data
+ * @param errorData - The hex string to decode (starting with 0x)
+ * @returns Decoded error information
+ */
+export async function decodeErrorData(errorData: string): Promise<any> {
+  // Validate input
+  if (!errorData || !errorData.startsWith('0x')) {
+    throw new Error('Invalid error data format. Must start with 0x.')
+  }
+  
+  // Extract error selector (first 4 bytes / 10 characters including 0x)
+  const hexSelector = strip0x(errorData);
+  const index1 = hexSelector.slice(0, 2);
+  const index2 = hexSelector.slice(2, 4);
+  const abiResponse = await requestAbi('error', index1, index2);
+
+  if (abiResponse == null) {
+    return null
+  }
+
+  const selector = errorData.slice(0, 10)
+  const { abi, url } = abiResponse;
+  const decoded = decodeErrorResult({
+    abi: abi,
+    data: errorData as `0x${string}`,  
+  });
+
+  const params = processObject(decoded.abiItem.inputs,decoded.args)  
+  // Default dummy data for structure
+  return {
+    selector,
+    errorName: decoded.errorName, // In actual implementation, extract the error name// In actual implementation, extract the error signature
+    params:params,
+    raw: errorData
   }
 }

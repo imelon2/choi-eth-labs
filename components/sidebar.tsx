@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Terminal, HexagonIcon } from "lucide-react"
+import { Terminal, HexagonIcon, AlertTriangle } from "lucide-react"
 
 export function Sidebar() {
   const pathname = usePathname()
@@ -96,6 +96,20 @@ export function Sidebar() {
                 >
                   <HexagonIcon width="24" height="24" />
                   <span>Calldata Decoder</span>
+                </li>
+                <li
+                  className={`flex items-center gap-3 rounded-md px-3 py-2 transition-colors hover:bg-muted cursor-pointer ${
+                    pathname === "/error-data" || pathname === "/error-decode" || pathname?.startsWith("/error-data/")
+                      ? "bg-muted text-primary" 
+                      : "text-foreground"
+                  }`}
+                  onClick={() => {
+                    router.push("/error-data")
+                    closeSidebar()
+                  }}
+                >
+                  <AlertTriangle width="24" height="24" />
+                  <span>Error Decoder</span>
                 </li>
               </ul>
             </div>
