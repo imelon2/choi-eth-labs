@@ -65,6 +65,18 @@ export default function Home() {
           <h2 className="text-xl font-mono">EVM Transaction Analyzer</h2>
         </Link>
       </div>
+      <div className="mt-8">
+        <Link href="/calldata" className="flex items-center justify-center hover:text-primary transition-colors">
+          <Code className="h-6 w-6 text-primary mr-2" />
+          <h2 className="text-xl font-mono">EVM Calldata Decoder</h2>
+        </Link>
+      </div>
+      <div className="mt-8">
+        <Link href="/error-data" className="flex items-center justify-center hover:text-primary transition-colors">
+          <Code className="h-6 w-6 text-primary mr-2" />
+          <h2 className="text-xl font-mono">EVM Error Decoder</h2>
+        </Link>
+      </div>
     </div>
   )
 }

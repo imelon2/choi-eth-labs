@@ -11,9 +11,12 @@ export class MultiPublicClient {
   }
 
   async getTransaction(hash: Hash) {
-    const promises = this.multiPublicClient.map((client) =>
-      client.getTransaction({ hash }).catch(() => null)
-    );
+    const promises = this.multiPublicClient.map((client) => {
+      return client
+        .getTransaction({ hash })
+        .then((result) => ({ result, client }))
+        .catch(() => ({ result: null, client }));
+    });
     return await multiRace(promises);
   }
 }

@@ -73,24 +73,27 @@ export async function fetchTransactionData(
 
   const MultiClient = new MultiPublicClient();
 
-  const tx = await MultiClient.getTransaction(hash as `0x${string}`);
-  if (tx == null) {
+  const result = await MultiClient.getTransaction(hash as `0x${string}`);
+  if (result == null) {
     return null;
   }
 
-  const MainClient = getChainClientFromChainId(tx.chainId!);
-  const receipt = await MainClient!.getTransactionReceipt({
+  const {result:tx,client:MainClient} = result
+  
+  // const MainClient = getChainClientFromChainId(tx.chainId!);
+  const receipt = await MainClient.getTransactionReceipt({
     hash: hash as `0x${string}`,
   });
   const block = await MainClient!.getBlock({ blockHash: tx.blockHash });
-
+  
   // Check if this is a contract creation transaction
   const isContractCreation = tx.to == null ? true : false;
 
+  
   // Example data (in a real implementation, we would transform API response data)
   return {
     hash,
-    network: `${MainClient?.chain.name}(${MainClient?.chain.id})`,
+    network: `${MainClient.chain!.name}(${MainClient.chain!.id})`,
     status: receipt.status,
     block: Number(block.number),
     timestamp: new Date(Number(block.timestamp) * 1000).toISOString(),
@@ -99,7 +102,7 @@ export async function fetchTransactionData(
     value: formatEther(tx.value),
     txFee:
       formatEther(receipt.gasUsed * receipt.effectiveGasPrice) +
-      ` ${MainClient?.chain.nativeCurrency.symbol}`,
+      ` ${MainClient.chain!.nativeCurrency.symbol}`,
     txType: `${receipt.type}${tx.typeHex ? `(${tx.typeHex})` : ""}`,
     gasPrice: formatUnits(receipt.effectiveGasPrice, 9) + " gwei",
     gasUsed: receipt.gasUsed.toString(),

@@ -264,9 +264,10 @@ export default function TransactionPage({ params }: { params: Promise<{ hash: st
                 {transaction.isContractCreation ? (
                   <InfoRow 
                     label="To" 
-                    value={transaction.to || "Contract Creation"} 
-                    copyable={!!transaction.to}
+                    value={transaction.contractAddress ? `${transaction.contractAddress}` : "Contract Creation"} 
+                    copyable={!!transaction.contractAddress}
                     isContractCreation={transaction.isContractCreation}
+                    contractAddress={transaction.contractAddress}
                   />
                 ) : (
                   <InfoRow label="To" value={transaction.to || ""} copyable />
@@ -479,21 +480,24 @@ interface InfoRowProps {
   value: string
   copyable?: boolean
   isContractCreation?: boolean
+  contractAddress?: string
 }
 
-function InfoRow({ label, value, copyable, isContractCreation }: InfoRowProps) {
+function InfoRow({ label, value, copyable, isContractCreation, contractAddress }: InfoRowProps) {
   return (
     <div className="flex flex-col">
-      <span className="text-sm text-muted-foreground mb-1">{label}</span>
-      <div className="flex items-center gap-2 break-all">
-        <span className="text-sm font-medium">{value}</span>
+      <div className="flex items-center gap-2 mb-1">
+        <span className="text-sm text-muted-foreground">{label}</span>
         {isContractCreation && (
           <span className="bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full">
             Contract Creation
           </span>
         )}
-        {copyable && value && (
-          <CopyButton value={value} className="h-6 w-6 -mr-1.5" />
+      </div>
+      <div className="flex items-center gap-2 break-all">
+        <span className="text-sm font-medium">{value}</span>
+        {copyable && (contractAddress || value) && (
+          <CopyButton value={contractAddress || value} className="h-6 w-6 -mr-1.5" />
         )}
       </div>
     </div>

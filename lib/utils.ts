@@ -1,23 +1,44 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { AbiEvent, decodeEventLog, Hex } from "viem";
+import { AbiEvent, decodeEventLog, Hex, PublicClient } from "viem";
 import { DACERT_HEADER } from "./constant";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function multiRace<T>(promises: Promise<T | null>[]): Promise<T | null> {
+// export function multiRace<T>(promises: Promise<T | null>[]): Promise<T | null> {
+//   return new Promise((resolve) => {
+//     let resolved = false;
+//     let pending = promises.length;
+
+//     for (const p of promises) {
+//       p.then((result) => {
+//         pending -= 1;
+//         if (!resolved && result !== null) {
+//           resolved = true;
+//           resolve(result);
+//         } else if (pending === 0 && !resolved) {
+//           resolve(null);
+//         }
+//       });
+//     }
+//   });
+// }
+
+export function multiRace<T, _>(
+  promises: Promise<{ result: T | null; client: PublicClient }>[]
+): Promise<{ result: T; client: PublicClient } | null> {
   return new Promise((resolve) => {
     let resolved = false;
     let pending = promises.length;
 
     for (const p of promises) {
-      p.then((result) => {
+      p.then(({ result, client }) => {
         pending -= 1;
         if (!resolved && result !== null) {
           resolved = true;
-          resolve(result);
+          resolve({ result, client });
         } else if (pending === 0 && !resolved) {
           resolve(null);
         }
