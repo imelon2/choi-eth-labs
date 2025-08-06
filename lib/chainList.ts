@@ -6,7 +6,7 @@ const dkargoWarehouse = defineChain({
     name: 'Dkargo',
     network: 'warehouse',
     nativeCurrency: {
-      name: 'dkargo',
+      name: 'dkargo warehouse',
       symbol: 'DKA',
       decimals: 18,
     },
