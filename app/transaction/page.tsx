@@ -92,15 +92,14 @@ export default function TransactionIndexPage() {
               <h3 className="font-medium mb-2">Example Transaction Hashes</h3>
               <div className="space-y-2">
                 {[
-                  "0x2959cd3d09cca9b1e302e9feba8b3ba36b0dd75dff95bbfd3a146170d6f97aa2",
-                  "0x1c4e12cd8576bc82eeb8e4c8a5841f5d1b42e9d8c7dfc43d7c6d2d96ee8a0ac7"
+                  "0x8098c1217be646833137349205da0974c698e1c316d7d7845eb28dabd68a46d8",
+                  "0x43128ad32edca6c16cf55f46264b91e9563a55aabd6859bc8f7050dfad400d95"
                 ].map((exampleHash, i) => (
                   <div key={i} className="flex items-center justify-between">
                     <code className="text-xs font-mono bg-muted p-1 rounded">
                       {exampleHash}
                     </code>
                     <Button 
-                      variant="ghost" 
                       size="sm" 
                       onClick={() => {
                         setHash(exampleHash)
@@ -120,7 +119,7 @@ export default function TransactionIndexPage() {
       <div className="grid grid-cols-1 gap-6 mt-10">
         <Card className="hover:border-primary/50 transition-all">
           <CardHeader>
-            <CardTitle>Documentation</CardTitle>
+            <CardTitle>ABI Archive</CardTitle>
             <CardDescription>
               Learn how to use our blockchain tools
             </CardDescription>

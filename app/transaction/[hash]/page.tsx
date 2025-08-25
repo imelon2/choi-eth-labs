@@ -303,7 +303,7 @@ export default function TransactionPage({ params }: { params: Promise<{ hash: st
                         <div className="mb-1">
                           <span className="text-sm text-muted-foreground mr-2">Name:</span>
                           <span className="font-medium">
-                            {decodedCallData.method || ''}
+                            {decodedCallData.method || 'Unknown Method'}
                           </span>
                           {decodedCallData.method && abiUrl && (
                             <Button
@@ -326,9 +326,9 @@ export default function TransactionPage({ params }: { params: Promise<{ hash: st
                       </div>
                     </div>
                     
-                    <div className="mt-4">
+                    <div className="mt-4 break-all whitespace-normal overflow-hidden">
                       <h4 className="font-medium mb-2">Parameters</h4>
-                      <JsonViewer data={JSON.parse(JSON.stringify(decodedCallData.params || {}, jsonReplacer))} />
+                      {decodedCallData.params ? <JsonViewer data={JSON.parse(JSON.stringify(decodedCallData.params || {}, jsonReplacer))} />: <p><code className="text-xs font-mono">{transaction.rawInput}</code></p>}
                     </div>
                   </div>
                 ) : (
@@ -414,18 +414,22 @@ export default function TransactionPage({ params }: { params: Promise<{ hash: st
                       {decodedEvents[currentEventIndex].name && decodedEvents[currentEventIndex].name !== 'Unknown Event' && (
                         <div>
                           <h5 className="font-medium mb-2">Parameters</h5>
-                          <JsonViewer data={JSON.parse(JSON.stringify(decodedEvents[currentEventIndex].params, jsonReplacer))} />
+                          <div className="break-all whitespace-normal overflow-hidden">
+                            <JsonViewer data={JSON.parse(JSON.stringify(decodedEvents[currentEventIndex].params, jsonReplacer))} />
+                          </div>
                         </div>
                       )}
                       
                       <div>
                         <h5 className="font-medium mb-2">Topics</h5>
-                        <JsonViewer data={JSON.parse(JSON.stringify(decodedEvents[currentEventIndex].topics, jsonReplacer))} initialExpanded={false} />
+                        <div className="break-all whitespace-normal overflow-hidden">
+                          <JsonViewer data={JSON.parse(JSON.stringify(decodedEvents[currentEventIndex].topics, jsonReplacer))} initialExpanded={false} />
+                        </div>
                       </div>
                       
                       <div>
                         <h5 className="font-medium mb-2">Raw Data</h5>
-                        <div className="rounded-md overflow-x-auto">
+                        <div className="rounded-md overflow-x-auto break-all whitespace-normal overflow-hidden">
                           <JsonViewer data={{"data": decodedEvents[currentEventIndex].rawData}} initialExpanded={false} />
                         </div>
                       </div>
@@ -454,14 +458,18 @@ export default function TransactionPage({ params }: { params: Promise<{ hash: st
                     {batchData.rollupData && (
                       <div>
                         <h5 className="font-medium mb-2">Rollup Data</h5>
-                        <JsonViewer data={JSON.parse(JSON.stringify(batchData.rollupData, jsonReplacer))} initialExpanded={false} />
+                        <div className="break-all whitespace-normal overflow-hidden">
+                          <JsonViewer data={JSON.parse(JSON.stringify(batchData.rollupData, jsonReplacer))} initialExpanded={false} />
+                        </div>
                       </div>
                     )}
                     
                     {batchData.daCert && (
                       <div>
                         <h5 className="font-medium mb-2">DA Cert</h5>
-                        <JsonViewer data={JSON.parse(JSON.stringify(batchData.daCert, jsonReplacer))} />
+                        <div className="break-all whitespace-normal overflow-hidden">
+                          <JsonViewer data={JSON.parse(JSON.stringify(batchData.daCert, jsonReplacer))} />
+                        </div>
                       </div>
                     )}
                   </div>
