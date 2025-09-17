@@ -21,6 +21,26 @@ const dkargoWarehouse = defineChain({
     dasUrls: ""
   });
 
+const dkargo = defineChain({
+    id: 61022894,
+    name: 'Dkargo',
+    network: 'dKargo',
+    nativeCurrency: {
+      name: 'dkargo',
+      symbol: 'DKA',
+      decimals: 18,
+    },
+    rpcUrls: {
+      default: {
+        http: ['https://mainnet-rpc.dkargo.io'],
+      },
+      public: {
+        http: ['https://mainnet-rpc.dkargo.io'],
+      },
+    },
+    dasUrls: ""
+  });
+
   export const supportedChains = [
     mainnet,
     sepolia,
@@ -29,5 +49,6 @@ const dkargoWarehouse = defineChain({
     kaia,
     polygon,
     dkargoWarehouse,
+    dkargo,
     localhost
   ];
