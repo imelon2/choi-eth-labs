@@ -1,5 +1,5 @@
 import { defineChain } from "viem";
-import { mainnet, kaia, polygon, sepolia, arbitrum, arbitrumSepolia, localhost } from 'viem/chains';
+import { mainnet, kaia, polygon, sepolia, arbitrum, arbitrumSepolia, localhost,base,baseSepolia } from 'viem/chains';
 
 const dkargoWarehouse = defineChain({
     id: 61022448,
@@ -50,5 +50,6 @@ const dkargo = defineChain({
     polygon,
     dkargoWarehouse,
     dkargo,
-    localhost
+    localhost,
+    base,baseSepolia
   ];
