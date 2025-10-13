@@ -1,12 +1,12 @@
-import { Hash, PublicClient, createPublicClient, http } from "viem";
+import { Chain, Hash, PublicClient, Transport, createPublicClient, http } from "viem";
 import { supportedChains } from "./chainList";
 import { multiRace } from "./utils";
 
 export class MultiPublicClient {
-  multiPublicClient: PublicClient[];
+  multiPublicClient: PublicClient<Transport, Chain>[];
   constructor() {
     this.multiPublicClient = supportedChains.map((chain) =>
-      createPublicClient({ chain, transport: http() })
+      createPublicClient({ chain:chain as Chain, transport: http() })
     );
   }
 
